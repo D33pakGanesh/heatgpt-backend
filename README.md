@@ -108,16 +108,4 @@ Current verification on October 10, 2026:
 - `npm run typecheck` passes.
 - `npm test` passes one health endpoint test without requiring Earth Engine or a database.
 - `npm run build` passes.
-- Production dependency audit reports 8 vulnerabilities in the Google Earth Engine and Google auth dependency chain.
-
-## Known Limitations
-
-- Earth Engine and Gemini require valid external credentials.
-- Local development requires LGA data to be loaded separately.
-- API tests currently cover only the health endpoint.
-- Some route inputs are manually validated; broader route-level test coverage is still needed.
-- License has not been declared.
-
-## Development History
-
-The original private HeatGPT repository shows backend code, database schema, API routes, Earth Engine services, and frontend code present in the initial verifiable commit on April 27, 2026. PostGIS satellite layer persistence was added later on April 27, 2026. A Tailscale Funnel/public deployment update was added on June 9, 2026. This repository was prepared as a standalone public-release tree on October 10, 2026 using a fresh history to avoid publishing private repository metadata or sensitive configuration.
+- `npm audit` reports 0 vulnerabilities. This uses a package-lock override that keeps `@google/earthengine` on its current release while resolving its Google API dependency chain to patched Node 20-compatible versions.

@@ -38,7 +38,7 @@ const ChatRequestSchema = z.object({
 router.post('/chat', chatLimiter, async (req: Request, res: Response) => {
   const parsed = ChatRequestSchema.safeParse(req.body)
   if (!parsed.success) {
-    return res.status(400).json({ error: 'Invalid request', details: parsed.error.errors })
+    return res.status(400).json({ error: 'Invalid request', details: parsed.error.issues })
   }
 
   const { heatStats, question, history } = parsed.data
