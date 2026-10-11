@@ -17,6 +17,10 @@ export function waitForEE(): Promise<void> {
   return _eeReadyPromise
 }
 
+export function isEarthEngineReady(): boolean {
+  return _eeReady
+}
+
 export async function getAccessToken(): Promise<{ token: string; projectId: string }> {
   const keyPath = process.env.EE_KEY_FILE!
   const key = JSON.parse(fs.readFileSync(keyPath, 'utf8'))

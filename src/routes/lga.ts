@@ -3,7 +3,7 @@ import axios from 'axios'
 import { pool } from '../db/pool'
 import { getAllLgas, getLgaById, getLgaGeometryById } from '../services/lgaService'
 import { getHeatStats, getHeatStatsForRange } from '../services/heatService'
-import { getAccessToken, computeLSTTrend, computeNDVITrend } from '../services/earthEngineService'
+import { getAccessToken, computeLSTTrend, computeNDVITrend, isEarthEngineReady } from '../services/earthEngineService'
 import { getGeeLayer } from '../services/geeLayerService'
 import { DateRange } from '../types'
 
@@ -42,6 +42,10 @@ router.get('/lga/:id/tiles', async (req: Request, res: Response) => {
   }
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).json({ error: 'Earth Engine service unavailable' })
+    }
+
     const dateRange: DateRange = {
       start: start ?? new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
       end: end ?? new Date().toISOString().slice(0, 10),
@@ -79,6 +83,10 @@ router.get('/lga/:id/lst-trend', async (req: Request, res: Response) => {
   if (!start || !end) return res.status(400).json({ error: 'start and end required' })
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).json({ error: 'Earth Engine service unavailable' })
+    }
+
     const lga = await getLgaById(req.params.id)
     if (!lga) return res.status(404).json({ error: 'LGA not found' })
 
@@ -96,6 +104,10 @@ router.get('/lga/:id/ndvi-trend', async (req: Request, res: Response) => {
   if (!start || !end) return res.status(400).json({ error: 'start and end required' })
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).json({ error: 'Earth Engine service unavailable' })
+    }
+
     const lga = await getLgaById(req.params.id)
     if (!lga) return res.status(404).json({ error: 'LGA not found' })
 
@@ -120,6 +132,10 @@ router.get('/lga/:id/tile-image', async (req: Request, res: Response) => {
   }
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).send('Earth Engine service unavailable')
+    }
+
     const { token } = await getAccessToken()
     const imageRes = await axios.get(cached.url, {
       headers: { Authorization: `Bearer ${token}` },
@@ -247,6 +263,10 @@ router.get('/lga/:id/suhi', async (req: Request, res: Response) => {
   } catch (_) {}
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).json({ error: 'Earth Engine unavailable' })
+    }
+
     const lga = await getLgaById(req.params.id)
     if (!lga) return res.status(404).json({ error: 'LGA not found' })
 
@@ -290,6 +310,10 @@ router.get('/lga/:id/suhi-tiles', async (req: Request, res: Response) => {
   }
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).json({ error: 'Earth Engine unavailable' })
+    }
+
     const lga = await getLgaById(req.params.id)
     if (!lga) return res.status(404).json({ error: 'LGA not found' })
 
@@ -316,6 +340,10 @@ router.get('/lga/:id/suhi-tile-image', async (req: Request, res: Response) => {
   }
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).send('Earth Engine unavailable')
+    }
+
     const { token } = await getAccessToken()
     const imageRes = await axios.get(cached.url, {
       headers: { Authorization: `Bearer ${token}` },
@@ -356,6 +384,10 @@ router.get('/lga/:id/suhi-monthly', async (req: Request, res: Response) => {
   } catch (_) {}
 
   try {
+    if (!isEarthEngineReady()) {
+      return res.status(503).json({ error: 'Earth Engine unavailable' })
+    }
+
     const lga = await getLgaById(req.params.id)
     if (!lga) return res.status(404).json({ error: 'LGA not found' })
 
