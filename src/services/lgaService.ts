@@ -55,7 +55,7 @@ export async function getLgaGeometryById(lgaId: string): Promise<GeoJSON.Feature
         lga_id,
         lga_name,
         state,
-        ST_AsGeoJSON(ST_SnapToGrid(geom, 0.0001)) AS geometry
+        ST_AsGeoJSON(geom) AS geometry
       FROM lgas
       WHERE lga_id = $1
     `,
