@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
 import axios from 'axios'
 import { pool } from '../db/pool'
-import { getAllLgas, getLgaById } from '../services/lgaService'
+import { getAllLgas, getLgaById, getLgaGeometryById } from '../services/lgaService'
 import { getHeatStats, getHeatStatsForRange } from '../services/heatService'
 import { getAccessToken, computeLSTTrend, computeNDVITrend } from '../services/earthEngineService'
 import { getGeeLayer } from '../services/geeLayerService'
@@ -20,6 +20,17 @@ router.get('/lgas', async (req: Request, res: Response) => {
   } catch (err) {
     console.error('GET /lgas error:', err)
     res.status(500).json({ error: 'Failed to retrieve LGA boundaries' })
+  }
+})
+
+router.get('/lga/:id/geometry', async (req: Request, res: Response) => {
+  try {
+    const feature = await getLgaGeometryById(req.params.id)
+    if (!feature) return res.status(404).json({ error: 'LGA not found' })
+    res.status(200).json(feature)
+  } catch (err) {
+    console.error('GET /lga/:id/geometry error:', err)
+    res.status(500).json({ error: 'Failed to retrieve LGA geometry' })
   }
 })
 
