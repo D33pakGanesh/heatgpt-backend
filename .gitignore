@@ -1,5 +1,12 @@
 node_modules/
 dist/
+coverage/
+.nyc_output/
+.cache/
+.vite/
+.codex/
+.claude/
+.cursor/
 .env
 .env.*
 !.env.example
@@ -7,5 +14,11 @@ dist/
 .DS_Store
 *.sqlite
 *.db
+*.dump
+*.sql.gz
+*.trace.zip
+*.har
 backups/
 tmp/
+temp/
+*.tmp

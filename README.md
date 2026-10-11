@@ -2,7 +2,7 @@
 
 HeatGPT Backend is the API service for the HeatGPT urban heat island explorer. It serves LGA boundaries from PostGIS, computes or retrieves satellite-derived heat metrics, proxies Earth Engine raster imagery, stores generated layer metadata, and sends selected LGA context to Gemini for HeatGPT chat responses.
 
-This repository is the standalone backend for `D33pakGanesh/heatgpt-backend`. It is designed to be used with the companion frontend at `D33pakGanesh/heatgpt-frontend`.
+This repository is the standalone backend for [D33pakGanesh/heatgpt-backend](https://github.com/D33pakGanesh/heatgpt-backend). It is designed to be used with the companion frontend at [D33pakGanesh/heatgpt-frontend](https://github.com/D33pakGanesh/heatgpt-frontend).
 
 ## Stack
 
@@ -33,6 +33,7 @@ Express API
 
 - `GET /api/health`
 - `GET /api/lgas`
+- `GET /api/lga/:id/geometry`
 - `GET /api/lga/:id/heat`
 - `GET /api/lga/:id/tiles`
 - `GET /api/lga/:id/tile-image`
@@ -103,9 +104,4 @@ npm test
 npm run build
 ```
 
-Current verification on October 10, 2026:
-
-- `npm run typecheck` passes.
-- `npm test` passes one health endpoint test without requiring Earth Engine or a database.
-- `npm run build` passes.
-- `npm audit` reports 0 vulnerabilities. This uses a package-lock override that keeps `@google/earthengine` on its current release while resolving its Google API dependency chain to patched Node 20-compatible versions.
+The test suite currently covers the health endpoint without requiring Earth Engine or a database. Earth Engine and PostGIS integration should be verified with authorised non-production credentials before deployment.
